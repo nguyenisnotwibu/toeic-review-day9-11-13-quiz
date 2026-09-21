@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOEIC Review Test - Day 9, 11, 13 (Nouns, Adjectives, Adverbs)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Inter',sans-serif; background:#0f172a; color:#e2e8f0; min-height:100vh; }
+  .screen { display:none; max-width:720px; margin:0 auto; padding:20px 16px; }
+  .screen.active { display:block; }
+  .start-card { text-align:center; padding:48px 10px; }
+  .brand { font-size:.8em; letter-spacing:2px; color:#64748b; text-transform:uppercase; margin-bottom:10px; }
+  .start-card h1 { font-size:2.1em; font-weight:800; background:linear-gradient(135deg,#60a5fa,#a78bfa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:8px; }
+  .start-card .subtitle { color:#94a3b8; font-size:1em; margin-bottom:28px; }
+  .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:22px; text-align:left; }
+  .info-box { background:#1e293b; border-radius:12px; padding:16px; border:1px solid #334155; }
+  .info-box .label { font-size:.75em; color:#64748b; text-transform:uppercase; letter-spacing:1px; }
+  .info-box .value { font-size:1.05em; font-weight:600; color:#f1f5f9; margin-top:4px; }
+  .scope { background:#1e293b; border:1px solid #334155; border-radius:12px; padding:16px 18px; text-align:left; margin-bottom:26px; font-size:.9em; line-height:1.8; color:#cbd5e1; }
+  .scope b { color:#f1f5f9; }
+  .name-input { width:100%; max-width:350px; padding:14px 20px; border-radius:12px; border:2px solid #334155; background:#1e293b; color:#f1f5f9; font-size:1em; text-align:center; margin-bottom:20px; outline:none; transition:border .2s; }
+  .name-input:focus { border-color:#60a5fa; }
+  .btn { padding:14px 40px; border-radius:12px; border:none; font-size:1.05em; font-weight:700; cursor:pointer; transition:all .2s; font-family:inherit; }
+  .btn-primary { background:linear-gradient(135deg,#3b82f6,#8b5cf6); color:#fff; }
+  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(59,130,246,.35); }
+  .btn-secondary { background:#1e293b; color:#94a3b8; border:1px solid #334155; }
+  .btn-secondary:hover { background:#334155; color:#f1f5f9; }
+  .quiz-header { display:flex; justify-content:space-between; align-items:center; padding:16px 0; margin-bottom:16px; border-bottom:1px solid #1e293b; }
+  .timer { font-size:1.4em; font-weight:700; font-variant-numeric:tabular-nums; }
+  .timer.warning { color:#f59e0b; }
+  .timer.danger { color:#ef4444; animation:pulse 1s infinite; }
+  @keyframes pulse { 50% { opacity:.5; } }
+  .progress-bar { width:100%; height:6px; background:#1e293b; border-radius:3px; margin-bottom:20px; overflow:hidden; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,#3b82f6,#8b5cf6); border-radius:3px; transition:width .4s ease; }
+  .q-counter { font-size:.85em; color:#64748b; }
+  .category-badge { display:inline-block; padding:4px 12px; border-radius:20px; font-size:.75em; font-weight:600; text-transform:uppercase; letter-spacing:.5px; margin-bottom:12px; }
+  .cat-noun { background:rgba(52,211,153,.15); color:#34d399; }
+  .cat-adj { background:rgba(251,146,60,.15); color:#fb923c; }
+  .cat-adv { background:rgba(96,165,250,.15); color:#60a5fa; }
+  .cat-mix { background:rgba(168,85,247,.15); color:#a855f7; }
+  .question-card { background:#1e293b; border-radius:16px; padding:26px; margin-bottom:16px; border:1px solid #334155; }
+  .question-text { font-size:1.12em; font-weight:600; line-height:1.55; margin-bottom:20px; }
+  .options { display:flex; flex-direction:column; gap:10px; }
+  .option { padding:14px 18px; border-radius:12px; border:2px solid #334155; background:#0f172a; cursor:pointer; transition:all .2s; font-size:.95em; line-height:1.4; }
+  .option:hover { border-color:#60a5fa; background:#172554; }
+  .option.correct { border-color:#22c55e; background:rgba(34,197,94,.12); }
+  .option.wrong { border-color:#ef4444; background:rgba(239,68,68,.12); }
+  .explanation { margin-top:16px; padding:14px 18px; background:#0f172a; border-radius:12px; border-left:3px solid #8b5cf6; font-size:.9em; line-height:1.6; color:#cbd5e1; display:none; }
+  .explanation b { color:#fbbf24; }
+  .explanation.show { display:block; }
+  .next-btn-wrap { text-align:right; margin-top:16px; }
+  .result-header { text-align:center; padding:30px 0 20px; }
+  .score-circle { width:160px; height:160px; border-radius:50%; margin:0 auto 20px; display:flex; align-items:center; justify-content:center; flex-direction:column; position:relative; }
+  .score-circle::before { content:''; position:absolute; inset:0; border-radius:50%; padding:4px; background:conic-gradient(#3b82f6 var(--pct), #1e293b var(--pct)); -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; }
+  .score-circle .pct { font-size:2.5em; font-weight:800; background:linear-gradient(135deg,#60a5fa,#a78bfa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .score-circle .label { font-size:.8em; color:#94a3b8; }
+  .raw { color:#cbd5e1; font-weight:600; margin-bottom:8px; }
+  .grade { font-size:1.3em; font-weight:700; margin-bottom:6px; }
+  .grade-msg { color:#94a3b8; margin-bottom:24px; }
+  .breakdown { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+  .break-card { background:#1e293b; border-radius:14px; padding:18px; text-align:center; border:1px solid #334155; }
+  .break-card .bc-label { font-size:.7em; text-transform:uppercase; letter-spacing:1px; color:#64748b; margin-bottom:6px; }
+  .break-card .bc-pct { font-size:1.8em; font-weight:800; }
+  .break-card .bc-detail { font-size:.8em; color:#94a3b8; margin-top:4px; }
+  .bc-noun .bc-pct { color:#34d399; } .bc-adj .bc-pct { color:#fb923c; } .bc-adv .bc-pct { color:#60a5fa; } .bc-mix .bc-pct { color:#a855f7; }
+  .advice-box { background:#1e293b; border:1px solid #334155; border-left:3px solid #f59e0b; border-radius:12px; padding:14px 18px; margin-bottom:26px; font-size:.9em; line-height:1.7; color:#cbd5e1; }
+  .advice-box b { color:#fbbf24; }
+  .lb-title { font-size:1.2em; font-weight:700; margin-bottom:14px; }
+  .lb-table { width:100%; border-collapse:collapse; margin-bottom:24px; }
+  .lb-table th { text-align:left; padding:10px 12px; font-size:.75em; text-transform:uppercase; letter-spacing:1px; color:#64748b; border-bottom:1px solid #334155; }
+  .lb-table td { padding:12px; border-bottom:1px solid #1e293b; }
+  .lb-table tr.me { background:#172554; }
+  .lb-rank { font-weight:700; width:40px; } .lb-name { font-weight:600; }
+  .lb-score { font-weight:700; color:#60a5fa; text-align:right; } .lb-time { color:#94a3b8; font-size:.85em; text-align:right; }
+  .action-row { display:flex; gap:12px; justify-content:center; margin-top:20px; flex-wrap:wrap; }
+  .filter-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
+  .filter-row button { padding:8px 14px; border-radius:20px; border:1px solid #334155; background:#1e293b; color:#94a3b8; cursor:pointer; font-family:inherit; font-size:.85em; }
+  .filter-row button.on { background:#172554; color:#f1f5f9; border-color:#60a5fa; }
+  .footer { text-align:center; color:#475569; font-size:.75em; margin-top:30px; }
+  @media (max-width:520px){ .info-grid,.breakdown{ grid-template-columns:1fr 1fr; } .btn{ padding:13px 26px; } .question-card{ padding:20px; } }
+</style>
+</head>
+<body>
+
+<div class="screen active" id="startScreen">
+  <div class="start-card">
+    <div class="brand">TOEIC · Thầy Vũ Nguyên</div>
+    <h1>TOEIC Review Test</h1>
+    <p class="subtitle">Kiểm tra tổng hợp Day 9 · Day 11 · Day 13 — Word Form: Danh từ · Tính từ · Trạng từ</p>
+    <div class="info-grid">
+      <div class="info-box"><div class="label">Nội dung</div><div class="value">Part 5 — Word Form</div></div>
+      <div class="info-box"><div class="label">Phạm vi</div><div class="value">Day 9 · 11 · 13</div></div>
+      <div class="info-box"><div class="label">Thời gian</div><div class="value">20 phút</div></div>
+      <div class="info-box"><div class="label">Số câu</div><div class="value">40 câu</div></div>
+    </div>
+    <div class="scope">
+      📗 <b>Day 9 – Danh từ:</b> hậu tố, chức năng (chủ ngữ / tân ngữ), định ngữ đứng trước, số ít – số nhiều – không đếm được<br>
+      📙 <b>Day 11 – Tính từ:</b> đuôi tính từ, -ed / -ing, 6 vị trí, adj + giới từ, cặp tính từ dễ nhầm<br>
+      📘 <b>Day 13 – Trạng từ & So sánh:</b> 5 vị trí trạng từ, ngoại lệ, so sánh bằng / hơn / nhất / kép / bội<br>
+      🔀 <b>Tổng hợp:</b> phân biệt N – Adj – Adv trong cùng một câu
+    </div>
+    <input class="name-input" id="playerName" placeholder="Nhập tên của bạn..." maxlength="30" />
+    <br>
+    <button class="btn btn-primary" onclick="startQuiz()">BẮT ĐẦU LÀM BÀI</button>
+  </div>
+</div>
+
+<div class="screen" id="quizScreen">
+  <div class="quiz-header">
+    <span class="q-counter" id="qCounter">1 / 40</span>
+    <span class="timer" id="timer">20:00</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div id="questionArea"></div>
+  <div class="next-btn-wrap">
+    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" style="display:none">Câu tiếp →</button>
+  </div>
+</div>
+
+<div class="screen" id="resultScreen">
+  <div class="result-header">
+    <div class="score-circle" id="scoreCircle"><span class="pct" id="scorePct">0%</span><span class="label">Tổng điểm</span></div>
+    <div class="raw" id="rawScore"></div>
+    <div class="grade" id="grade"></div>
+    <div class="grade-msg" id="gradeMsg"></div>
+  </div>
+  <div class="breakdown">
+    <div class="break-card bc-noun"><div class="bc-label">Danh từ · Day 9</div><div class="bc-pct" id="nounPct">0%</div><div class="bc-detail" id="nounDetail"></div></div>
+    <div class="break-card bc-adj"><div class="bc-label">Tính từ · Day 11</div><div class="bc-pct" id="adjPct">0%</div><div class="bc-detail" id="adjDetail"></div></div>
+    <div class="break-card bc-adv"><div class="bc-label">Trạng từ & So sánh · Day 13</div><div class="bc-pct" id="advPct">0%</div><div class="bc-detail" id="advDetail"></div></div>
+    <div class="break-card bc-mix"><div class="bc-label">Tổng hợp Word Form</div><div class="bc-pct" id="mixPct">0%</div><div class="bc-detail" id="mixDetail"></div></div>
+  </div>
+  <div class="advice-box" id="adviceBox"></div>
+  <div class="lb-title">🏆 Bảng xếp hạng</div>
+  <table class="lb-table"><thead><tr><th>#</th><th>Tên</th><th style="text-align:right">Điểm</th><th style="text-align:right">Thời gian</th></tr></thead><tbody id="lbBody"></tbody></table>
+  <div class="action-row">
+    <button class="btn btn-primary" onclick="retryQuiz()">Làm lại</button>
+    <button class="btn btn-secondary" onclick="showAnswers()">Xem đáp án</button>
+  </div>
+</div>
+
+<div class="screen" id="reviewScreen">
+  <h2 style="margin-bottom:16px;font-size:1.4em">📋 Đáp án chi tiết</h2>
+  <div class="filter-row" id="filterRow">
+    <button class="on" onclick="renderReview('all',this)">Tất cả</button>
+    <button onclick="renderReview('wrong',this)">Câu sai</button>
+    <button onclick="renderReview('noun',this)">Danh từ</button>
+    <button onclick="renderReview('adj',this)">Tính từ</button>
+    <button onclick="renderReview('adv',this)">Trạng từ</button>
+    <button onclick="renderReview('mix',this)">Tổng hợp</button>
+  </div>
+  <div id="reviewArea"></div>
+  <div class="action-row" style="margin-top:24px">
+    <button class="btn btn-primary" onclick="retryQuiz()">Làm lại</button>
+    <button class="btn btn-secondary" onclick="backToResult()">← Kết quả</button>
+  </div>
+  <div class="footer">TOEIC Review Quiz Day 9–11–13 · Thầy Vũ Nguyên</div>
+</div>
+
+<script>
+const questions = [
+ {
+  "cat": "noun",
+  "q": "Từ nào dưới đây là DANH TỪ (dù có đuôi -al giống tính từ)?",
+  "opts": [
+   "(A) personal",
+   "(B) additional",
+   "(C) proposal",
+   "(D) optional"
+  ],
+  "ans": 2,
+  "exp": "Nhóm hậu tố -al tạo DANH TỪ (Day 9 – LP1): arrival, denial, refusal, approval, <b>proposal</b>. Personal / additional / optional đều là tính từ."
+ },
+ {
+  "cat": "adj",
+  "q": "Từ nào dưới đây là TÍNH TỪ dù có đuôi -ly?",
+  "opts": [
+   "(A) quickly",
+   "(B) costly",
+   "(C) carefully",
+   "(D) recently"
+  ],
+  "ans": 1,
+  "exp": "Bẫy yêu thích của TOEIC (Day 11): friendly, lovely, <b>costly</b>, timely là TÍNH TỪ. Các từ còn lại là trạng từ."
+ },
+ {
+  "cat": "adv",
+  "q": "Trạng từ (adverb) KHÔNG bổ nghĩa cho loại từ nào?",
+  "opts": [
+   "(A) Động từ",
+   "(B) Tính từ",
+   "(C) Trạng từ khác",
+   "(D) Danh từ"
+  ],
+  "ans": 3,
+  "exp": "Nguyên tắc vàng (Day 13): Adverb bổ nghĩa cho động từ, tính từ, trạng từ khác và cả câu. <b>Danh từ</b> do TÍNH TỪ bổ nghĩa."
+ },
+ {
+  "cat": "mix",
+  "q": "Câu nào dưới đây ĐÚNG ngữ pháp?",
+  "opts": [
+   "(A) She looks beautifully.",
+   "(B) She looks beautiful.",
+   "(C) He walks slow to the office.",
+   "(D) The soup tastes deliciously."
+  ],
+  "ans": 1,
+  "exp": "Linking verb (look, seem, taste…) + ADJ → <b>looks beautiful</b>, tastes delicious. Action verb + ADV → walks slowly (Day 11 – Vị trí 2)."
+ },
+ {
+  "cat": "noun",
+  "q": "Hậu tố nào dưới đây tạo danh từ chỉ NGƯỜI?",
+  "opts": [
+   "(A) -ment",
+   "(B) -ness",
+   "(C) -ee",
+   "(D) -ity"
+  ],
+  "ans": 2,
+  "exp": "Hậu tố chỉ người (Day 9 – LP1B): -er, -ist, -ian, -or, -ess, <b>-ee</b> (employee, attendee, interviewee), -ant/-ent."
+ },
+ {
+  "cat": "adj",
+  "q": "The results of the customer survey were very ------- to the board members.",
+  "opts": [
+   "(A) disappointed",
+   "(B) disappoint",
+   "(C) disappointment",
+   "(D) disappointing"
+  ],
+  "ans": 3,
+  "exp": "Chủ ngữ là VẬT (the results) → GÂY RA cảm xúc → <b>V-ing</b>. Quy tắc Day 11: -ed = bị, -ing = gây ra."
+ },
+ {
+  "cat": "adv",
+  "q": "The board of directors has ------- approved the new budget plan.",
+  "opts": [
+   "(A) officially",
+   "(B) official",
+   "(C) office",
+   "(D) officiate"
+  ],
+  "ans": 0,
+  "exp": "Vị trí giữa trợ động từ <i>has</i> và V3 <i>approved</i> → cần TRẠNG TỪ (Day 13 – Vị trí 2)."
+ },
+ {
+  "cat": "noun",
+  "q": "The ------- of the new software will take about two hours.",
+  "opts": [
+   "(A) install",
+   "(B) installation",
+   "(C) installed",
+   "(D) installable"
+  ],
+  "ans": 1,
+  "exp": "Sau mạo từ <i>The</i> + trước <i>of</i> → cần DANH TỪ. Đuôi -ation (Day 9 – LP3: a/an/the + N)."
+ },
+ {
+  "cat": "mix",
+  "q": "The company ------- expanded its operations into Southeast Asia last year.",
+  "opts": [
+   "(A) success",
+   "(B) successful",
+   "(C) succeed",
+   "(D) successfully"
+  ],
+  "ans": 3,
+  "exp": "Chỗ trống giữa chủ ngữ (The company) và động từ (expanded) → TRẠNG TỪ <b>successfully</b> (Day 13 – Vị trí 2)."
+ },
+ {
+  "cat": "adj",
+  "q": "The staff felt ------- after working overtime for two weeks.",
+  "opts": [
+   "(A) exhausted",
+   "(B) exhausting",
+   "(C) exhaust",
+   "(D) exhaustion"
+  ],
+  "ans": 0,
+  "exp": "Chủ ngữ là NGƯỜI (the staff) BỊ tác động → <b>-ed</b>. Linking verb <i>felt</i> + ADJ."
+ },
+ {
+  "cat": "noun",
+  "q": "------- in the global market has increased significantly this year.",
+  "opts": [
+   "(A) Compete",
+   "(B) Competitive",
+   "(C) Competition",
+   "(D) Competitively"
+  ],
+  "ans": 2,
+  "exp": "Chỗ trống đứng trước động từ <i>has increased</i> → làm CHỦ NGỮ → DANH TỪ (Day 9 – LP2: N + V)."
+ },
+ {
+  "cat": "adv",
+  "q": "The instructions in the user manual are ------- clear.",
+  "opts": [
+   "(A) extreme",
+   "(B) extremely",
+   "(C) extremity",
+   "(D) extremes"
+  ],
+  "ans": 1,
+  "exp": "Trước tính từ <i>clear</i> → cần TRẠNG TỪ (ADV + ADJ – Day 13 – Vị trí 3)."
+ },
+ {
+  "cat": "adj",
+  "q": "The new plan proposed by the manager sounds ------- to most employees.",
+  "opts": [
+   "(A) reason",
+   "(B) reasonably",
+   "(C) reasonable",
+   "(D) reasoning"
+  ],
+  "ans": 2,
+  "exp": "<i>Sound</i> là LINKING VERB → theo sau là TÍNH TỪ (Day 11 – Vị trí 2). Không dùng trạng từ reasonably."
+ },
+ {
+  "cat": "noun",
+  "q": "All visitors must obtain ------- before entering the laboratory.",
+  "opts": [
+   "(A) permission",
+   "(B) permissive",
+   "(C) permissible",
+   "(D) permitted"
+  ],
+  "ans": 0,
+  "exp": "Sau động từ <i>obtain</i> → TÂN NGỮ → DANH TỪ (V + N). Permission là danh từ KHÔNG đếm được."
+ },
+ {
+  "cat": "mix",
+  "q": "The engineering team developed a ------- innovative design for the new engine.",
+  "opts": [
+   "(A) remarkable",
+   "(B) remark",
+   "(C) remarkably",
+   "(D) remarking"
+  ],
+  "ans": 2,
+  "exp": "Cấu trúc a + <b>ADV</b> + ADJ + N: trạng từ <i>remarkably</i> bổ nghĩa cho tính từ <i>innovative</i>. Bẫy: nhiều bạn chọn remarkable vì thấy a/an."
+ },
+ {
+  "cat": "adv",
+  "q": "-------, the meeting was postponed due to the heavy rain.",
+  "opts": [
+   "(A) Unfortunate",
+   "(B) Fortune",
+   "(C) Unfortunateness",
+   "(D) Unfortunately"
+  ],
+  "ans": 3,
+  "exp": "Đầu câu + dấu phẩy → TRẠNG TỪ bổ nghĩa cho cả câu (Day 13 – Vị trí 5)."
+ },
+ {
+  "cat": "noun",
+  "q": "The ------- were very impressed with the quality of the new model.",
+  "opts": [
+   "(A) reviewer",
+   "(B) reviewers",
+   "(C) review",
+   "(D) reviewing"
+  ],
+  "ans": 1,
+  "exp": "Động từ chia số nhiều <i>were</i> → chọn DANH TỪ SỐ NHIỀU (Day 9 – WF2: verb agreement)."
+ },
+ {
+  "cat": "adj",
+  "q": "Is there anything ------- on the agenda for today's meeting?",
+  "opts": [
+   "(A) importance",
+   "(B) important",
+   "(C) importantly",
+   "(D) import"
+  ],
+  "ans": 1,
+  "exp": "Tính từ đứng SAU đại từ bất định (anything, something, nothing…) → <b>anything important</b> (Day 11 – Vị trí 4)."
+ },
+ {
+  "cat": "adv",
+  "q": "Sales have ------- changed since last month; they remain almost the same.",
+  "opts": [
+   "(A) hard",
+   "(B) harder",
+   "(C) hardly",
+   "(D) hardness"
+  ],
+  "ans": 2,
+  "exp": "<b>hardly</b> = hầu như không ≠ hard (chăm chỉ / khó). Ngoại lệ cần nhớ (Day 13 – 1.1)."
+ },
+ {
+  "cat": "mix",
+  "q": "Our new marketing ------- has attracted many young customers.",
+  "opts": [
+   "(A) strategy",
+   "(B) strategic",
+   "(C) strategically",
+   "(D) strategize"
+  ],
+  "ans": 0,
+  "exp": "Sau tính từ sở hữu <i>our</i> + danh từ bổ nghĩa <i>marketing</i>, trước động từ <i>has</i> → DANH TỪ (chủ ngữ)."
+ },
+ {
+  "cat": "noun",
+  "q": "The manager gave us some useful ------- on how to improve our presentation.",
+  "opts": [
+   "(A) advices",
+   "(B) advise",
+   "(C) advisable",
+   "(D) advice"
+  ],
+  "ans": 3,
+  "exp": "<b>advice</b> là danh từ KHÔNG đếm được → không có dạng số nhiều “advices”. advise là động từ (Day 9 – bảng countable/uncountable)."
+ },
+ {
+  "cat": "adj",
+  "q": "The CEO found the new proposal very -------.",
+  "opts": [
+   "(A) interest",
+   "(B) interesting",
+   "(C) interested",
+   "(D) interestingly"
+  ],
+  "ans": 1,
+  "exp": "Find + O + ADJ (Day 11 – Vị trí 5). Tân ngữ là VẬT (the proposal) → GÂY hứng thú → <b>-ing</b>."
+ },
+ {
+  "cat": "adv",
+  "q": "The new printer works as ------- as the old one.",
+  "opts": [
+   "(A) quickly",
+   "(B) quick",
+   "(C) quicker",
+   "(D) more quickly"
+  ],
+  "ans": 0,
+  "exp": "Giữa as…as dùng DẠNG NGUYÊN. <i>Works</i> là động từ hành động → cần TRẠNG TỪ → <b>as quickly as</b>."
+ },
+ {
+  "cat": "noun",
+  "q": "Every ------- must wear an identification badge inside the building.",
+  "opts": [
+   "(A) employees",
+   "(B) employment",
+   "(C) employee",
+   "(D) employ"
+  ],
+  "ans": 2,
+  "exp": "Sau <b>every / each / one</b> → danh từ đếm được SỐ ÍT. Nghĩa cần NGƯỜI (đeo thẻ) → employee."
+ },
+ {
+  "cat": "mix",
+  "q": "Road signs must be clearly ------- even in the distance.",
+  "opts": [
+   "(A) vision",
+   "(B) visible",
+   "(C) visibly",
+   "(D) visibility"
+  ],
+  "ans": 1,
+  "exp": "Sau trạng từ <i>clearly</i> → cần TÍNH TỪ (ADV + ADJ). Công thức trong bài Day 11 – Vị trí 3."
+ },
+ {
+  "cat": "adj",
+  "q": "Mr. Park is responsible ------- training all newly hired staff.",
+  "opts": [
+   "(A) of",
+   "(B) with",
+   "(C) in",
+   "(D) for"
+  ],
+  "ans": 3,
+  "exp": "Cụm cố định: be responsible <b>for</b>. Nhớ bộ 3 hay gặp: satisfied with, interested in, responsible for (Day 11 – Phần 4)."
+ },
+ {
+  "cat": "adv",
+  "q": "The new model is ------- than the previous one.",
+  "opts": [
+   "(A) reliable",
+   "(B) more reliable",
+   "(C) most reliable",
+   "(D) reliabler"
+  ],
+  "ans": 1,
+  "exp": "Có <i>than</i> → so sánh hơn. <i>Reliable</i> là tính từ dài → <b>more + ADJ + than</b>."
+ },
+ {
+  "cat": "noun",
+  "q": "Which of the following is an UNCOUNTABLE noun?",
+  "opts": [
+   "(A) suitcase",
+   "(B) machine",
+   "(C) product",
+   "(D) equipment"
+  ],
+  "ans": 3,
+  "exp": "Danh từ không đếm được hay gặp: equipment, information, furniture, baggage, machinery, merchandise, advice… (Day 9 – WF2)."
+ },
+ {
+  "cat": "mix",
+  "q": "Customer service staff should respond ------- to all complaints.",
+  "opts": [
+   "(A) prompt",
+   "(B) promptly",
+   "(C) promptness",
+   "(D) prompted"
+  ],
+  "ans": 1,
+  "exp": "<i>Respond</i> là động từ hành động → sau nó cần TRẠNG TỪ (S + V + ADV – Day 13 – Vị trí 1)."
+ },
+ {
+  "cat": "adj",
+  "q": "The company has invested a ------- amount of money in research.",
+  "opts": [
+   "(A) considerate",
+   "(B) considerably",
+   "(C) considerable",
+   "(D) consideration"
+  ],
+  "ans": 2,
+  "exp": "a + ADJ + N → tính từ. <b>considerable</b> = đáng kể ≠ considerate = chu đáo. Considerably là trạng từ (bẫy)."
+ },
+ {
+  "cat": "adv",
+  "q": "This is ------- building in the city.",
+  "opts": [
+   "(A) the tallest",
+   "(B) taller",
+   "(C) tallest",
+   "(D) most tall"
+  ],
+  "ans": 0,
+  "exp": "So sánh nhất tính từ ngắn: <b>the + ADJ-est</b>. Luôn có THE (Day 13 – 2.4)."
+ },
+ {
+  "cat": "noun",
+  "q": "The hotel offers ------- facilities for business travelers.",
+  "opts": [
+   "(A) much",
+   "(B) a little",
+   "(C) every",
+   "(D) many"
+  ],
+  "ans": 3,
+  "exp": "<i>facilities</i> là danh từ đếm được SỐ NHIỀU → dùng <b>many</b>. Much / a little đi với DT không đếm được, every + số ít."
+ },
+ {
+  "cat": "adj",
+  "q": "The new printer is more ------- because it uses less ink.",
+  "opts": [
+   "(A) economical",
+   "(B) economic",
+   "(C) economy",
+   "(D) economically"
+  ],
+  "ans": 0,
+  "exp": "<b>economical</b> = tiết kiệm; economic = thuộc về kinh tế (economic growth). Cặp -ic / -ical (Day 11)."
+ },
+ {
+  "cat": "mix",
+  "q": "The ------- of the new policy depends on employee cooperation.",
+  "opts": [
+   "(A) effective",
+   "(B) effectiveness",
+   "(C) effectively",
+   "(D) more effective"
+  ],
+  "ans": 1,
+  "exp": "Sau <i>The</i>, trước <i>of</i> và làm CHỦ NGỮ của <i>depends</i> → DANH TỪ (đuôi -ness)."
+ },
+ {
+  "cat": "adv",
+  "q": "The ------- you practice, the better your TOEIC score will be.",
+  "opts": [
+   "(A) much",
+   "(B) most",
+   "(C) more",
+   "(D) many"
+  ],
+  "ans": 2,
+  "exp": "So sánh càng… càng: <b>The + comparative…, the + comparative</b> → The more…, the better (Day 13 – 2.5b)."
+ },
+ {
+  "cat": "adj",
+  "q": "The team has won three ------- championships.",
+  "opts": [
+   "(A) successful",
+   "(B) success",
+   "(C) successfully",
+   "(D) successive"
+  ],
+  "ans": 3,
+  "exp": "<b>successive</b> = liên tiếp ≠ successful = thành công. 3 chức vô địch LIÊN TIẾP (Day 11 – Confusing Adjectives)."
+ },
+ {
+  "cat": "noun",
+  "q": "Ms. Lee thanked her team for their ------- during the product launch.",
+  "opts": [
+   "(A) assistance",
+   "(B) assist",
+   "(C) assisted",
+   "(D) assistive"
+  ],
+  "ans": 0,
+  "exp": "Sau tính từ sở hữu <i>their</i> → DANH TỪ (Day 9 – LP3). Đuôi -ance."
+ },
+ {
+  "cat": "mix",
+  "q": "The weather this week is ------- than last week, so the outdoor event was cancelled.",
+  "opts": [
+   "(A) bad",
+   "(B) badly",
+   "(C) worst",
+   "(D) worse"
+  ],
+  "ans": 3,
+  "exp": "Có <i>than</i> → so sánh hơn. Bad là bất quy tắc: bad → <b>worse</b> → the worst."
+ },
+ {
+  "cat": "adv",
+  "q": "The new factory produces twice as ------- products as the old one.",
+  "opts": [
+   "(A) more",
+   "(B) many",
+   "(C) much",
+   "(D) most"
+  ],
+  "ans": 1,
+  "exp": "So sánh bội: twice/three times + as + dạng NGUYÊN + as. <i>products</i> đếm được → <b>many</b>."
+ },
+ {
+  "cat": "adj",
+  "q": "The budget is ------- tight for our company to launch a TV campaign.",
+  "opts": [
+   "(A) so",
+   "(B) enough",
+   "(C) too",
+   "(D) very"
+  ],
+  "ans": 2,
+  "exp": "<b>too + ADJ + to V</b> = quá… đến nỗi không thể. (So…that, adj + enough + to V – Day 11 – Vị trí 6)."
+ }
+];
+const TOTAL_TIME = 1200;
+const catMap = {noun:'cat-noun', adj:'cat-adj', adv:'cat-adv', mix:'cat-mix'};
+const labelMap = {noun:'📗 Danh từ · Day 9', adj:'📙 Tính từ · Day 11', adv:'📘 Trạng từ & So sánh · Day 13', mix:'🔀 Tổng hợp Word Form'};
+const reviewTips = {
+  noun:'<b>Danh từ (Day 9):</b> ôn lại hậu tố (-tion, -ment, -ance, -ity, -al, -ee…), vị trí sau a/an/the, tính từ sở hữu, giới từ; và bảng danh từ không đếm được + từ chỉ số lượng.',
+  adj:'<b>Tính từ (Day 11):</b> ôn lại quy tắc -ed = bị / -ing = gây ra, linking verbs, anything + adj, make/keep/find + O + adj, cụm adj + giới từ và 7 cặp tính từ dễ nhầm.',
+  adv:'<b>Trạng từ & So sánh (Day 13):</b> ôn lại 5 vị trí trạng từ, ngoại lệ hard/hardly, late/lately, high/highly và 6 công thức so sánh.',
+  mix:'<b>Tổng hợp:</b> luyện thói quen nhìn TỪ ĐỨNG TRƯỚC và SAU chỗ trống: trước N → adj; trước adj → adv; sau linking verb → adj; sau action verb → adv.'
+};
+let current = 0, answers = [], playerName = "", timerInterval, timeLeft = TOTAL_TIME, startTime;
+
+function startQuiz() {
+  playerName = document.getElementById('playerName').value.trim() || "Học viên";
+  current = 0; answers = new Array(questions.length).fill(-1);
+  timeLeft = TOTAL_TIME; startTime = Date.now();
+  document.getElementById('timer').textContent = '20:00';
+  document.getElementById('timer').className = 'timer';
+  showScreen('quizScreen'); renderQuestion();
+  clearInterval(timerInterval); timerInterval = setInterval(updateTimer, 1000);
+}
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active'); window.scrollTo(0, 0);
+}
+function updateTimer() {
+  timeLeft--;
+  if (timeLeft <= 0) { clearInterval(timerInterval); finishQuiz(); return; }
+  const m = Math.floor(timeLeft / 60), s = timeLeft % 60;
+  const el = document.getElementById('timer');
+  el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  el.className = 'timer' + (timeLeft <= 60 ? ' danger' : timeLeft <= 180 ? ' warning' : '');
+}
+function renderQuestion() {
+  const q = questions[current];
+  document.getElementById('qCounter').textContent = `Câu ${current + 1} / ${questions.length}`;
+  document.getElementById('progressFill').style.width = `${(current / questions.length) * 100}%`;
+  document.getElementById('nextBtn').style.display = 'none';
+  let h = `<span class="category-badge ${catMap[q.cat]}">${labelMap[q.cat]}</span>`;
+  h += `<div class="question-card"><div class="question-text">${current + 1}. ${q.q}</div><div class="options">`;
+  q.opts.forEach((opt, i) => { h += `<div class="option" data-idx="${i}" onclick="selectOption(${i})">${opt}</div>`; });
+  h += `</div><div class="explanation" id="explanation">💡 ${q.exp}</div></div>`;
+  document.getElementById('questionArea').innerHTML = h;
+}
+function selectOption(idx) {
+  if (answers[current] !== -1) return;
+  answers[current] = idx;
+  const q = questions[current];
+  document.querySelectorAll('#questionArea .option').forEach(o => {
+    o.style.pointerEvents = 'none';
+    const oi = parseInt(o.dataset.idx);
+    if (oi === q.ans) o.classList.add('correct');
+    if (oi === idx && idx !== q.ans) o.classList.add('wrong');
+  });
+  document.getElementById('explanation').classList.add('show');
+  const nb = document.getElementById('nextBtn');
+  nb.style.display = 'inline-block';
+  nb.textContent = current === questions.length - 1 ? 'Xem kết quả' : 'Câu tiếp →';
+}
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) { clearInterval(timerInterval); finishQuiz(); return; }
+  renderQuestion(); window.scrollTo(0, 0);
+}
+function finishQuiz() {
+  const elapsed = Math.floor((Date.now() - startTime) / 1000);
+  const cats = {noun:{c:0,t:0}, adj:{c:0,t:0}, adv:{c:0,t:0}, mix:{c:0,t:0}};
+  let total = 0;
+  questions.forEach((q, i) => { cats[q.cat].t++; if (answers[i] === q.ans) { cats[q.cat].c++; total++; } });
+  const pct = Math.round((total / questions.length) * 100);
+  document.getElementById('scoreCircle').style.setProperty('--pct', `${pct * 3.6}deg`);
+  document.getElementById('scorePct').textContent = pct + '%';
+  document.getElementById('rawScore').textContent = `${total} / ${questions.length} câu đúng`;
+  let grade, msg;
+  if (pct >= 90) { grade = "🌟 Xuất sắc!"; msg = "Bạn nắm rất vững Word Form Day 9 – 11 – 13."; }
+  else if (pct >= 75) { grade = "👍 Tốt!"; msg = "Nền tảng chắc — xem lại các câu sai là ổn."; }
+  else if (pct >= 50) { grade = "📝 Khá"; msg = "Cần ôn lại phần có điểm thấp nhất bên dưới."; }
+  else { grade = "💪 Cần cố gắng thêm"; msg = "Hãy đọc lại handout Day 9, 11, 13 rồi làm lại bài nhé!"; }
+  document.getElementById('grade').textContent = grade;
+  document.getElementById('gradeMsg').textContent = msg;
+  const weak = [];
+  Object.keys(cats).forEach(k => {
+    const p = cats[k].t ? Math.round(cats[k].c / cats[k].t * 100) : 0;
+    document.getElementById(k + 'Pct').textContent = p + '%';
+    document.getElementById(k + 'Detail').textContent = `${cats[k].c}/${cats[k].t} câu đúng`;
+    if (p < 80) weak.push([p, k]);
+  });
+  weak.sort((a, b) => a[0] - b[0]);
+  document.getElementById('adviceBox').innerHTML = weak.length
+    ? '📌 <b>Gợi ý ôn tập:</b><br>' + weak.map(w => '• ' + reviewTips[w[1]]).join('<br>')
+    : '✅ Tất cả các phần đều đạt từ 80% trở lên. Giữ vững phong độ!';
+  const record = {name: playerName, score: pct, time: elapsed, ts: Date.now()};
+  let lb = [];
+  try { lb = JSON.parse(localStorage.getItem('toeic_review_9_11_13_lb') || '[]'); } catch(e) { lb = []; }
+  lb.push(record); lb.sort((a, b) => b.score - a.score || a.time - b.time); lb = lb.slice(0, 20);
+  try { localStorage.setItem('toeic_review_9_11_13_lb', JSON.stringify(lb)); } catch(e) {}
+  const medals = ['🥇','🥈','🥉'];
+  document.getElementById('lbBody').innerHTML = lb.map((r, i) => {
+    const me = r.ts === record.ts; const m = Math.floor(r.time / 60), s = r.time % 60;
+    const safe = String(r.name).replace(/[<>&]/g, '');
+    return `<tr class="${me ? 'me' : ''}"><td class="lb-rank">${i < 3 ? medals[i] : i + 1}</td><td class="lb-name">${safe}</td><td class="lb-score">${r.score}%</td><td class="lb-time">${m}:${String(s).padStart(2,'0')}</td></tr>`;
+  }).join('');
+  showScreen('resultScreen');
+}
+function retryQuiz() { showScreen('startScreen'); }
+function renderReview(filter, btn) {
+  if (btn) { document.querySelectorAll('#filterRow button').forEach(b => b.classList.remove('on')); btn.classList.add('on'); }
+  const html = questions.map((q, i) => {
+    const ua = answers[i], ok = ua === q.ans;
+    if (filter === 'wrong' && ok) return '';
+    if (['noun','adj','adv','mix'].includes(filter) && q.cat !== filter) return '';
+    const icon = ok ? '✅' : ua === -1 ? '⏭️' : '❌';
+    const opts = q.opts.map((o, oi) => {
+      let c = ''; if (oi === q.ans) c = 'correct'; if (oi === ua && ua !== q.ans) c = 'wrong';
+      return `<div class="option ${c}" style="pointer-events:none">${o}</div>`;
+    }).join('');
+    return `<div style="margin-bottom:20px"><span class="category-badge ${catMap[q.cat]}">${labelMap[q.cat]}</span> <span style="font-size:.85em;color:#64748b">${icon} Câu ${i+1}</span>
+      <div class="question-card"><div class="question-text">${i+1}. ${q.q}</div><div class="options">${opts}</div><div class="explanation show">💡 ${q.exp}</div></div></div>`;
+  }).join('');
+  document.getElementById('reviewArea').innerHTML = html || '<p style="color:#94a3b8">Không có câu nào trong mục này 🎉</p>';
+}
+function showAnswers() { renderReview('all', document.querySelector('#filterRow button')); showScreen('reviewScreen'); }
+function backToResult() { showScreen('resultScreen'); }
+document.getElementById('playerName').focus();
+</script>
+</body>
+</html>
