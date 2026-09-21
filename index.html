@@ -92,7 +92,7 @@
     <div class="info-grid">
       <div class="info-box"><div class="label">Nội dung</div><div class="value">Part 5 — Word Form</div></div>
       <div class="info-box"><div class="label">Phạm vi</div><div class="value">Day 9 · 11 · 13</div></div>
-      <div class="info-box"><div class="label">Thời gian</div><div class="value">20 phút</div></div>
+      <div class="info-box"><div class="label">Thời gian</div><div class="value">30 phút</div></div>
       <div class="info-box"><div class="label">Số câu</div><div class="value">40 câu</div></div>
     </div>
     <div class="scope">
@@ -110,7 +110,7 @@
 <div class="screen" id="quizScreen">
   <div class="quiz-header">
     <span class="q-counter" id="qCounter">1 / 40</span>
-    <span class="timer" id="timer">20:00</span>
+    <span class="timer" id="timer">30:00</span>
   </div>
   <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
   <div id="questionArea"></div>
@@ -642,7 +642,7 @@ const questions = [
   "exp": "<b>too + ADJ + to V</b> = quá… đến nỗi không thể. (So…that, adj + enough + to V – Day 11 – Vị trí 6)."
  }
 ];
-const TOTAL_TIME = 1200;
+const TOTAL_TIME = 1800;
 const catMap = {noun:'cat-noun', adj:'cat-adj', adv:'cat-adv', mix:'cat-mix'};
 const labelMap = {noun:'📗 Danh từ · Day 9', adj:'📙 Tính từ · Day 11', adv:'📘 Trạng từ & So sánh · Day 13', mix:'🔀 Tổng hợp Word Form'};
 const reviewTips = {
@@ -657,7 +657,7 @@ function startQuiz() {
   playerName = document.getElementById('playerName').value.trim() || "Học viên";
   current = 0; answers = new Array(questions.length).fill(-1);
   timeLeft = TOTAL_TIME; startTime = Date.now();
-  document.getElementById('timer').textContent = '20:00';
+  document.getElementById('timer').textContent = '30:00';
   document.getElementById('timer').className = 'timer';
   showScreen('quizScreen'); renderQuestion();
   clearInterval(timerInterval); timerInterval = setInterval(updateTimer, 1000);
